@@ -1,7 +1,9 @@
+// Importa as classes necessárias
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
+// Classe que estende a classe Thread e representa um filósofo
 public class Filosofo extends Thread{
+    // Cada filósofo tem um garfo à esquerda e um à direita
     private final Lock garfoEsquerda;
     private final Lock garfoDireita;
 
@@ -13,6 +15,7 @@ public class Filosofo extends Thread{
 
     @Override
     public void run() {
+        // O filósofo executa um ciclo infinito de pensar, pegar garfos, comer e soltar garfos
         while (true) {
             pensar();
             pegarGarfos();
@@ -22,10 +25,12 @@ public class Filosofo extends Thread{
     }
 
     private void pensar() {
+        // Imprime uma mensagem indicando que o filósofo está pensando
         System.out.println(Thread.currentThread().getName() + " está pensando");
     }
 
     private void pegarGarfos() {
+        // Tenta adquirir ambos os garfos. Se não conseguir adquirir ambos, ele libera o garfo que conseguiu e tenta novamente
         boolean pegouGarfos = false;
         while (!pegouGarfos) {
             if (garfoEsquerda.tryLock()) {
@@ -36,14 +41,17 @@ public class Filosofo extends Thread{
                 }
             }
         }
+        // Imprime uma mensagem indicando que o filósofo pegou os garfos
         System.out.println(Thread.currentThread().getName() + " pegou os dois garfos");
     }
 
     private void comer() {
+        // Imprime uma mensagem indicando que o filósofo está comendo
         System.out.println(Thread.currentThread().getName() + " está comendo");
     }
 
     private void soltarGarfos() {
+        // Libera ambos os garfos e imprime uma mensagem indicando que o filósofo soltou os garfos
         garfoEsquerda.unlock();
         System.out.println(Thread.currentThread().getName() + " soltou o garfo esquerdo");
         garfoDireita.unlock();
